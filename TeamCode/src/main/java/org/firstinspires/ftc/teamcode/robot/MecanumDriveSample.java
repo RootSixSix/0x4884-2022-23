@@ -27,7 +27,6 @@ public class MecanumDriveSample extends OpMode {
     private DcMotor front_right = null;
     private DcMotor back_left   = null;
     private DcMotor back_right  = null;
-    Telemetry t = null;
 
     @Override
     public void init() {
@@ -106,11 +105,11 @@ public class MecanumDriveSample extends OpMode {
         front_right.setPower(0.5*rightFrontPower);
         back_left.setPower(0.5*leftBackPower);
         back_right.setPower(0.5*rightBackPower);
-/*
-        t.addData("Front left/Right", "%4.2f, %4.2f", leftFrontPower, rightFrontPower);
-        t.addData("Back  left/Right", "%4.2f, %4.2f", leftBackPower, rightBackPower);
-        t.update();
 
- */
+        telemetry.addData("Front left/Right", "%4.2f, %4.2f", leftFrontPower, rightFrontPower);
+        telemetry.addData("Back  left/Right", "%4.2f, %4.2f", leftBackPower, rightBackPower);
+        telemetry.update();
+
+
     }
 }

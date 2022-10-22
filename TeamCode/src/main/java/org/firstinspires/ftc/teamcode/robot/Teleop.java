@@ -19,15 +19,14 @@ public class Teleop extends OpMode{
     private DcMotor leftBackDrive = null;
     private DcMotor rightFrontDrive = null;
     private DcMotor rightBackDrive = null;
-    HardwareMap hwMap = null;
-    Telemetry t = null;
 
     public void init(){
-        robot.init(hwMap, t);
-        leftFrontDrive  = hwMap.get(DcMotor.class, "left_front_drive");
-        leftBackDrive  = hwMap.get(DcMotor.class, "left_back_drive");
-        rightFrontDrive = hwMap.get(DcMotor.class, "right_front_drive");
-        rightBackDrive = hwMap.get(DcMotor.class, "right_back_drive");
+        robot.init(hardwareMap, telemetry);
+
+        leftFrontDrive  = hardwareMap.get(DcMotor.class, "left_front_drive");
+        leftBackDrive  = hardwareMap.get(DcMotor.class, "left_back_drive");
+        rightFrontDrive = hardwareMap.get(DcMotor.class, "right_front_drive");
+        rightBackDrive = hardwareMap.get(DcMotor.class, "right_back_drive");
 
 
         leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
@@ -92,10 +91,10 @@ public class Teleop extends OpMode{
             rightBackDrive.setPower(rightBackPower);
 
             // Show the elapsed game time and wheel power.
-            t.addData("Status", "Run Time: " + runtime.toString());
-            t.addData("Front left/Right", "%4.2f, %4.2f", leftFrontPower, rightFrontPower);
-            t.addData("Back  left/Right", "%4.2f, %4.2f", leftBackPower, rightBackPower);
-            t.update();
+            telemetry.addData("Status", "Run Time: " + runtime.toString());
+            telemetry.addData("Front left/Right", "%4.2f, %4.2f", leftFrontPower, rightFrontPower);
+            telemetry.addData("Back  left/Right", "%4.2f, %4.2f", leftBackPower, rightBackPower);
+            telemetry.update();
         }
 
     }

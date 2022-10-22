@@ -21,7 +21,6 @@ public class Robot {
     public DcMotor[] driveMotorsMode = new DcMotor[3];
     public BNO055IMU imu = null;
     private Telemetry telemetry = null;
-    HardwareMap hwMap = null;
     static final boolean useIMU = true;
     static final double COUNTS_PER_MOTOR_REV = 1440;    // eg: TETRIX Motor Encoder
     static final double DRIVE_GEAR_REDUCTION = 19.2;     // This is < 1.0 if geared UP
@@ -29,7 +28,7 @@ public class Robot {
     static final double COUNTS_PER_OUTPUT_REVOL = 537.7;
     static final double COUNTS_PER_INCH = (22.0 / 16.0) * (COUNTS_PER_OUTPUT_REVOL) / (WHEEL_DIAMETER_INCHES * Math.PI);
 
-    public void init(HardwareMap ahwMap, Telemetry t){
+    public void init(HardwareMap ahwMap,  Telemetry telemetry){
         HardwareMap hwMap;
         hwMap = ahwMap;
 
