@@ -27,6 +27,8 @@ public class MecanumDriveSample extends OpMode {
     private DcMotor front_right = null;
     private DcMotor back_left   = null;
     private DcMotor back_right  = null;
+    double motorMultiplicative = 1;
+    boolean turboMode = false;
 
     @Override
     public void init() {
@@ -101,14 +103,26 @@ public class MecanumDriveSample extends OpMode {
         // *magnitude*.  Not the greatest velocity.
 
         // apply the calculated values to the motors.
-        front_left.setPower(0.5*leftFrontPower);
-        front_right.setPower(0.5*rightFrontPower);
-        back_left.setPower(0.5*leftBackPower);
-        back_right.setPower(0.5*rightBackPower);
+        if(gamepad1.right_bumper){
+            if(turboMode = false){
+                turboMode = true;
+                motorMultiplicative = 1;
+            }
+            if(turboMode = true){
+                turboMode = false;
+                motorMultiplicative = 0.7;
+            }
+        }
 
-        telemetry.addData("Front left/Right", "%4.2f, %4.2f", leftFrontPower, rightFrontPower);
-        telemetry.addData("Back  left/Right", "%4.2f, %4.2f", leftBackPower, rightBackPower);
-        telemetry.update();
+        front_left.setPower(motorMultiplicative*leftFrontPower);
+        front_right.setPower(motorMultiplicative*rightFrontPower);
+        back_left.setPower(motorMultiplicative*leftBackPower);
+        back_right.setPower(motorMultiplicative*rightBackPower);
+
+
+      //  telemetry.addData("Front left/Right", "%4.2f, %4.2f", leftFrontPower, rightFrontPower);
+        //telemetry.addData("Back  left/Right", "%4.2f, %4.2f", leftBackPower, rightBackPower);
+        //telemetry.update();
 
 
     }
