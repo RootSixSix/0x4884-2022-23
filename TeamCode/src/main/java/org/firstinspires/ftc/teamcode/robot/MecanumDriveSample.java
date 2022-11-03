@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.robot;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.util.Utility;
@@ -27,8 +29,12 @@ public class MecanumDriveSample extends OpMode {
     private DcMotor front_right = null;
     private DcMotor back_left   = null;
     private DcMotor back_right  = null;
+    private DcMotor arm = null;
+    private Servo claw = null;
     double motorMultiplicative = 1;
     boolean turboMode = false;
+    double armConstant = 0.5;
+    double clawConstant = 0.5;
 
     @Override
     public void init() {
@@ -39,11 +45,14 @@ public class MecanumDriveSample extends OpMode {
         front_right  = hardwareMap.get(DcMotor.class, "frdrive");
         back_left    = hardwareMap.get(DcMotor.class, "bldrive");
         back_right   = hardwareMap.get(DcMotor.class, "brdrive");
+        claw = hardwareMap.get(Servo.class,"claw");
+        arm = hardwareMap.get(DcMotor.class,"arm");
 
         front_left.setDirection(DcMotor.Direction.REVERSE);
         back_left.setDirection(DcMotor.Direction.REVERSE);
         front_right.setDirection(DcMotor.Direction.FORWARD);
         back_right.setDirection(DcMotor.Direction.FORWARD);
+        arm.setDirection(DcMotor.Direction.FORWARD);
     }
 
     @Override
@@ -54,6 +63,8 @@ public class MecanumDriveSample extends OpMode {
         double drive  = Utility.deadStick(-gamepad1.left_stick_y);
         double strafe = Utility.deadStick(gamepad1.left_stick_x);
         double twist  = Utility.deadStick(gamepad1.right_stick_x);
+        double clawPower = Utility.deadStick(gamepad2.left_stick_y);
+        double armPower = Utility.deadStick(gamepad2.right_stick_y);
 
 
         /*
@@ -118,6 +129,8 @@ public class MecanumDriveSample extends OpMode {
         front_right.setPower(motorMultiplicative*rightFrontPower);
         back_left.setPower(motorMultiplicative*leftBackPower);
         back_right.setPower(motorMultiplicative*rightBackPower);
+        arm.setPower(armPower*armConstant);
+        claw.setPosition(clawPower*clawConstant);
 
 
       //  telemetry.addData("Front left/Right", "%4.2f, %4.2f", leftFrontPower, rightFrontPower);
