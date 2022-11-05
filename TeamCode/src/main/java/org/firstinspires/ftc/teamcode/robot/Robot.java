@@ -4,6 +4,7 @@
 package org.firstinspires.ftc.teamcode.robot;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.motors.RevRoboticsCoreHexMotor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -27,6 +28,14 @@ public class Robot {
     static final double WHEEL_DIAMETER_INCHES = 2.95276;     // For figuring circumference
     static final double COUNTS_PER_OUTPUT_REVOL = 537.7;
     static final double COUNTS_PER_INCH = (22.0 / 16.0) * (COUNTS_PER_OUTPUT_REVOL) / (WHEEL_DIAMETER_INCHES * Math.PI);
+    double clawOpen = 0;
+    double clawClose = 0;
+    double armGround = 0;
+    double armLowBar = 0;
+    double armMiddleBar = 0;
+    double armHighBar = 0;
+    public RevRoboticsCoreHexMotor armMotor = null;
+
 
     public void init(HardwareMap ahwMap,  Telemetry telemetry){
         HardwareMap hwMap;
