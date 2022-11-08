@@ -21,7 +21,7 @@ public class Robot {
     public DcMotor[] driveMotors2WheelX = new DcMotor[2];
     public DcMotor[] driveMotorsMode = new DcMotor[3];
     public BNO055IMU imu = null;
-    private Telemetry telemetry = null;
+    Telemetry telemetry = null;
     static final boolean useIMU = true;
     static final double COUNTS_PER_MOTOR_REV = 1440;    // eg: TETRIX Motor Encoder
     static final double DRIVE_GEAR_REDUCTION = 19.2;     // This is < 1.0 if geared UP
@@ -35,10 +35,11 @@ public class Robot {
     double armMiddleBar = 0;
     double armHighBar = 0;
     public RevRoboticsCoreHexMotor armMotor = null;
+    HardwareMap hwMap = null;
 
 
-    public void init(HardwareMap ahwMap,  Telemetry telemetry){
-        HardwareMap hwMap;
+    public void init(HardwareMap ahwMap){
+
         hwMap = ahwMap;
 
         front_left = hwMap.get(DcMotor .class, "fldrive");

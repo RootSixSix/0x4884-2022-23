@@ -1,15 +1,11 @@
 package org.firstinspires.ftc.teamcode.robot;
 
-import com.qualcomm.hardware.motors.RevRoboticsCoreHexMotor;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.util.Utility;
 
 /**
@@ -18,7 +14,7 @@ import org.firstinspires.ftc.teamcode.util.Utility;
  *
  * @author Brandon Gong
  */
-@TeleOp(name="Mecanum Drive Example", group="Iterative Opmode")
+@TeleOp(name="Teleop", group="19380")
 public class MecanumDriveSample extends OpMode {
 
     /*
@@ -31,12 +27,16 @@ public class MecanumDriveSample extends OpMode {
     private DcMotor front_left  = null;
     private DcMotor front_right = null;
     private DcMotor back_left   = null;
-    private DcMotor back_right  = null;
- //   private DcMotorEx arm = null;
+  //  private DcMotor back_right  = null;
+    private DcMotor arm = null;
     private Servo leftClaw = null;
     private Servo rightClaw = null;
-    double driveMultiplicative = 1;
+    double driveMultiplicative = 0.8;
     boolean turboMode = false;
+    double leftClawClosePosition = 0.41;
+    double leftClawOpenPosition = 0;
+    double rightClawClosePosition = 0.439215707789307;
+    double rightClawOpenPosition = 0;
     double armConstant = 0.7;
     double clawConstant = 0.8;
 
@@ -48,14 +48,18 @@ public class MecanumDriveSample extends OpMode {
         front_left   = hardwareMap.get(DcMotor.class, "fldrive");
         front_right  = hardwareMap.get(DcMotor.class, "frdrive");
         back_left    = hardwareMap.get(DcMotor.class, "bldrive");
-        back_right   = hardwareMap.get(DcMotor.class, "brdrive");
-     //   arm = hardwareMap.get(DcMotorEx.class, "armdrive");
-        leftClaw = hardwareMap.get(Servo.class, "leftClaw");
+    //    back_right   = hardwareMap.get(DcMotor.class, "brdrive");
+        arm = hardwareMap.get(DcMotor.class, "armdrive");
         rightClaw = hardwareMap.get(Servo.class, "rightClaw");
+        leftClaw = hardwareMap.get(Servo.class, "leftClaw");
         front_left.setDirection(DcMotor.Direction.REVERSE);
         back_left.setDirection(DcMotor.Direction.REVERSE);
         front_right.setDirection(DcMotor.Direction.FORWARD);
-        back_right.setDirection(DcMotor.Direction.FORWARD);
+     //   back_right.setDirection(DcMotor.Direction.FORWARD);
+        leftClaw.setDirection(Servo.Direction.FORWARD);
+        rightClaw.setDirection(Servo.Direction.REVERSE);
+        leftClaw.setPosition(0);
+        rightClaw.setPosition(0);
     }
 
     @Override
@@ -66,8 +70,8 @@ public class MecanumDriveSample extends OpMode {
         double drive  = Utility.deadStick(-gamepad1.left_stick_y);
         double strafe = Utility.deadStick(gamepad1.left_stick_x);
         double twist  = Utility.deadStick(gamepad1.right_stick_x);
-     //   double armPower = Utility.deadStick(gamepad2.left_stick_y);
-        double clawControl = Utility.deadStick(gamepad2.right_stick_y);
+        double armPower = Utility.deadStick(gamepad2.left_stick_y);
+        double clawControl = Utility.deadStick(gamepad2.right_trigger);
 
         /*
          * If we had a gyro and wanted to do field-oriented control, here
@@ -130,10 +134,14 @@ public class MecanumDriveSample extends OpMode {
         front_left.setPower(driveMultiplicative*leftFrontPower);
         front_right.setPower(driveMultiplicative*rightFrontPower);
         back_left.setPower(driveMultiplicative*leftBackPower);
-        back_right.setPower(driveMultiplicative*rightBackPower);
-      //  arm.setPower(armConstant*armPower);
-        leftClaw.setPosition(clawControl*clawConstant);
-        rightClaw.setPosition(clawControl*clawConstant);
+     //   back_right.setPower(driveMultiplicative*rightBackPower);
+        arm.setPower(armConstant*armPower);
+
+       clawClose();
+       clawOpen();
+        telemetry.addData("Claw Position",clawControl*clawConstant);
+        telemetry.update();
+
 
 
       //  telemetry.addData("Front left/Right", "%4.2f, %4.2f", leftFrontPower, rightFrontPower);
@@ -141,5 +149,18 @@ public class MecanumDriveSample extends OpMode {
         //telemetry.update();
 
 
+    }
+    public void clawClose(){
+        if(gamepad2.right_bumper){
+            leftClaw.setPosition(leftClawClosePosition);
+            rightClaw.setPosition(rightClawClosePosition);
+        }
+
+    }
+    public void clawOpen(){
+        if (gamepad2.left_bumper){
+            leftClaw.setPosition(leftClawOpenPosition);
+            rightClaw.setPosition(rightClawOpenPosition);
+        }
     }
 }
