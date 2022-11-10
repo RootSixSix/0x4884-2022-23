@@ -59,6 +59,8 @@ public class AutoBlueRedTerminal extends LinearOpMode {
         waitForStart();
         if(opModeIsActive()){
             ElapsedTime runtime = new ElapsedTime();
+            clawClose();
+
             while(runtime.seconds()<0.15){
                 front_right.setPower(0.5);
                 front_left.setPower(0.5);
@@ -96,6 +98,37 @@ public class AutoBlueRedTerminal extends LinearOpMode {
             }
 
             //arm goes up
+            clawOpen();
+            //arm goes down
+            //reverses the actions
+            while(runtime.seconds()<0.15){
+                front_left.setPower(-0.5);
+                back_right.setPower(-0.5);
+
+                front_right.setPower(0.5);
+                back_left.setPower(0.5);
+
+                runtime.reset();
+            }
+
+            while(runtime.seconds()<2){
+                front_right.setPower(-0.5);
+                front_left.setPower(-0.5);
+                back_left.setPower(-0.5);
+                back_right.setPower(-0.5);
+
+                runtime.reset();
+            }
+
+            while(runtime.seconds()<0.15){
+                front_left.setPower(0.5);
+                back_right.setPower(0.5);
+
+                front_right.setPower(-0.5);
+                back_left.setPower(-0.5);
+
+                runtime.reset();
+            }
 
 
 
@@ -204,6 +237,19 @@ public class AutoBlueRedTerminal extends LinearOpMode {
 
     public void rotateToHeading(double heading, double power, double timeoutSeconds){
 
+    }
+    public void clawClose(){
+        if(gamepad2.right_bumper){
+            leftClaw.setPosition(leftClawClosePosition);
+            rightClaw.setPosition(rightClawClosePosition);
+        }
+
+    }
+    public void clawOpen(){
+        if (gamepad2.left_bumper){
+            leftClaw.setPosition(leftClawOpenPosition);
+            rightClaw.setPosition(rightClawOpenPosition);
+        }
     }
 
 }
