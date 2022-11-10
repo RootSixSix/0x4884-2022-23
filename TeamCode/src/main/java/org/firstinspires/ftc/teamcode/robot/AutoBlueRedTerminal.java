@@ -23,11 +23,16 @@ public class AutoBlueRedTerminal extends LinearOpMode {
     double leftClawOpenPosition = 0;
     double rightClawClosePosition = 0.439215707789307;
     double rightClawOpenPosition = 0;
-    double armConstant = 0.7;
+    double armConstant = 0.85;
     double clawConstant = 0.8;
     static final double WHEEL_DIAMETER_INCHES = 2.25;     // For figuring circumference
     static final double COUNTS_PER_OUTPUT_REVOL = 537.7;
     static final double COUNTS_PER_INCH = (22.0 / 16.0) * (COUNTS_PER_OUTPUT_REVOL) / (WHEEL_DIAMETER_INCHES * Math.PI);
+    static final double ARM_RESET_POS = 0;
+    static final double ARM_GROUND_JUNCTION_POS = 0;
+    static final double ARM_LOW_BAR_POS = 0;
+    static final double ARM_MIDDLE_BAR_POS = 0;
+    static final double ARM_HIGH_BAR_POS = 0;
 
     private final ElapsedTime runtime = new ElapsedTime();
 
@@ -53,7 +58,47 @@ public class AutoBlueRedTerminal extends LinearOpMode {
         rightClaw.setPosition(0);
         waitForStart();
         if(opModeIsActive()){
-            driveDistance(30,0.9,10);
+            ElapsedTime runtime = new ElapsedTime();
+            while(runtime.seconds()<0.15){
+                front_right.setPower(0.5);
+                front_left.setPower(0.5);
+                back_right.setPower(0.5);
+                back_left.setPower(0.5);
+                runtime.reset();
+            }
+            while(runtime.seconds()<2){
+                front_left.setPower(0.5);
+                back_right.setPower(0.5);
+
+                front_right.setPower(-0.5);
+                back_left.setPower(-0.5);
+
+                runtime.reset();
+            }
+
+            while(runtime.seconds()<2){
+                front_right.setPower(0.5);
+                front_left.setPower(0.5);
+                back_left.setPower(0.5);
+                back_right.setPower(0.5);
+
+                runtime.reset();
+            }
+
+            while(runtime.seconds()<0.15){
+                front_left.setPower(0.5);
+                back_right.setPower(0.5);
+
+                front_right.setPower(-0.5);
+                back_left.setPower(-0.5);
+
+                runtime.reset();
+            }
+
+            //arm goes up
+
+
+
         }
     }
     public int convertInchesToCounts(double inches) {
@@ -126,8 +171,9 @@ public class AutoBlueRedTerminal extends LinearOpMode {
     public void driveDistance(double inches, double power, double timeoutSeconds){
         runtime.reset();
         int movecounts = (int)(convertInchesToCounts(inches));
-        double forward = power;
         if(opModeIsActive()&&runtime.seconds()<timeoutSeconds){
+            setRunMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
             int fr = front_right.getCurrentPosition();
             int fl = front_left.getCurrentPosition();
             int br = back_right.getCurrentPosition();
@@ -147,9 +193,17 @@ public class AutoBlueRedTerminal extends LinearOpMode {
             front_right.setTargetPosition(newfr);
             back_left.setTargetPosition(newbl);
             back_right.setTargetPosition(newbr);
+
+            front_left.setPower(power);
+            front_right.setPower(power);
+            back_left.setPower(power);
+            back_right.setPower(power);
         }
         setDriveStop();
-        setRunMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+
+    public void rotateToHeading(double heading, double power, double timeoutSeconds){
+
     }
 
 }

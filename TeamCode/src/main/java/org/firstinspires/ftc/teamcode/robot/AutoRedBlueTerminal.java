@@ -21,8 +21,13 @@ public class AutoRedBlueTerminal extends LinearOpMode {
     double leftClawOpenPosition = 0;
     double rightClawClosePosition = 0.439215707789307;
     double rightClawOpenPosition = 0;
-    double armConstant = 0.7;
+    double armConstant = 0.85;
     double clawConstant = 0.8;
+    static final double ARM_RESET_POS = 0;
+    static final double ARM_GROUND_JUNCTION_POS = 0;
+    static final double ARM_LOW_BAR_POS = 0;
+    static final double ARM_MIDDLE_BAR_POS = 0;
+    static final double ARM_HIGH_BAR_POS = 0;
 
 
     public void runOpMode() throws InterruptedException {

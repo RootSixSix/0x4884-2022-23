@@ -27,7 +27,7 @@ public class MecanumDriveSample extends OpMode {
     private DcMotor front_left  = null;
     private DcMotor front_right = null;
     private DcMotor back_left   = null;
-  //  private DcMotor back_right  = null;
+    private DcMotor back_right  = null;
     private DcMotor arm = null;
     private Servo leftClaw = null;
     private Servo rightClaw = null;
@@ -37,8 +37,9 @@ public class MecanumDriveSample extends OpMode {
     double leftClawOpenPosition = 0;
     double rightClawClosePosition = 0.439215707789307;
     double rightClawOpenPosition = 0;
-    double armConstant = 0.7;
+    double armConstant = 0.85;
     double clawConstant = 0.8;
+
 
     @Override
     public void init() {
@@ -48,14 +49,14 @@ public class MecanumDriveSample extends OpMode {
         front_left   = hardwareMap.get(DcMotor.class, "fldrive");
         front_right  = hardwareMap.get(DcMotor.class, "frdrive");
         back_left    = hardwareMap.get(DcMotor.class, "bldrive");
-    //    back_right   = hardwareMap.get(DcMotor.class, "brdrive");
+        back_right   = hardwareMap.get(DcMotor.class, "brdrive");
         arm = hardwareMap.get(DcMotor.class, "armdrive");
         rightClaw = hardwareMap.get(Servo.class, "rightClaw");
         leftClaw = hardwareMap.get(Servo.class, "leftClaw");
         front_left.setDirection(DcMotor.Direction.REVERSE);
         back_left.setDirection(DcMotor.Direction.REVERSE);
         front_right.setDirection(DcMotor.Direction.FORWARD);
-     //   back_right.setDirection(DcMotor.Direction.FORWARD);
+        back_right.setDirection(DcMotor.Direction.FORWARD);
         leftClaw.setDirection(Servo.Direction.FORWARD);
         rightClaw.setDirection(Servo.Direction.REVERSE);
         leftClaw.setPosition(0);
@@ -134,12 +135,14 @@ public class MecanumDriveSample extends OpMode {
         front_left.setPower(driveMultiplicative*leftFrontPower);
         front_right.setPower(driveMultiplicative*rightFrontPower);
         back_left.setPower(driveMultiplicative*leftBackPower);
-     //   back_right.setPower(driveMultiplicative*rightBackPower);
+        back_right.setPower(driveMultiplicative*rightBackPower);
         arm.setPower(armConstant*armPower);
 
-       clawClose();
-       clawOpen();
+        clawClose();
+        clawOpen();
+        double armPos = arm.getCurrentPosition();
         telemetry.addData("Claw Position",clawControl*clawConstant);
+        telemetry.addData("Arm Position", armPos);
         telemetry.update();
 
 
