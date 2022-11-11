@@ -36,7 +36,9 @@ public class AutoBlueRedTerminal extends LinearOpMode {
 
     private final ElapsedTime runtime = new ElapsedTime();
 
+
     public void runOpMode() throws InterruptedException {
+
         front_left   = hardwareMap.get(DcMotor.class, "fldrive");
         front_right  = hardwareMap.get(DcMotor.class, "frdrive");
         back_left    = hardwareMap.get(DcMotor.class, "bldrive");
@@ -58,78 +60,80 @@ public class AutoBlueRedTerminal extends LinearOpMode {
         rightClaw.setPosition(0);
         waitForStart();
         if(opModeIsActive()){
-            ElapsedTime runtime = new ElapsedTime();
             clawClose();
 
-            while(runtime.seconds()<0.15){
-                front_right.setPower(0.5);
+            while(runtime.seconds()<1){
+
+                front_right.setPower(-0.5);
                 front_left.setPower(0.5);
                 back_right.setPower(0.5);
-                back_left.setPower(0.5);
+                back_left.setPower(-0.5);
                 runtime.reset();
             }
-            while(runtime.seconds()<2){
+ /*           ElapsedTime runtime2 = new ElapsedTime();
+            while(runtime2.seconds()<2){
                 front_left.setPower(0.5);
                 back_right.setPower(0.5);
 
                 front_right.setPower(-0.5);
                 back_left.setPower(-0.5);
 
-                runtime.reset();
+                runtime2.reset();
             }
-
-            while(runtime.seconds()<2){
+            ElapsedTime runtime3 = new ElapsedTime();
+            while(runtime3.seconds()<2){
                 front_right.setPower(0.5);
                 front_left.setPower(0.5);
                 back_left.setPower(0.5);
                 back_right.setPower(0.5);
 
-                runtime.reset();
+                runtime3.reset();
             }
-
-            while(runtime.seconds()<0.15){
+            ElapsedTime runtime4 = new ElapsedTime();
+            while(runtime4.seconds()<0.15){
                 front_left.setPower(0.5);
                 back_right.setPower(0.5);
 
                 front_right.setPower(-0.5);
                 back_left.setPower(-0.5);
 
-                runtime.reset();
+                runtime4.reset();
             }
 
             //arm goes up
             clawOpen();
             //arm goes down
             //reverses the actions
-            while(runtime.seconds()<0.15){
+            ElapsedTime runtime5 = new ElapsedTime();
+            while(runtime5.seconds()<0.15){
                 front_left.setPower(-0.5);
                 back_right.setPower(-0.5);
 
                 front_right.setPower(0.5);
                 back_left.setPower(0.5);
 
-                runtime.reset();
+                runtime5.reset();
             }
-
-            while(runtime.seconds()<2){
+            ElapsedTime runtime6 = new ElapsedTime();
+            while(runtime6.seconds()<2){
                 front_right.setPower(-0.5);
                 front_left.setPower(-0.5);
                 back_left.setPower(-0.5);
                 back_right.setPower(-0.5);
 
-                runtime.reset();
+                runtime6.reset();
             }
-
-            while(runtime.seconds()<0.15){
+            ElapsedTime runtime7 = new ElapsedTime();
+            while(runtime7.seconds()<0.15){
                 front_left.setPower(0.5);
                 back_right.setPower(0.5);
 
                 front_right.setPower(-0.5);
                 back_left.setPower(-0.5);
 
-                runtime.reset();
+                runtime7.reset();
             }
-
+*/
 
 
         }
@@ -202,6 +206,7 @@ public class AutoBlueRedTerminal extends LinearOpMode {
     }
 
     public void driveDistance(double inches, double power, double timeoutSeconds){
+        ElapsedTime runtime = new ElapsedTime();
         runtime.reset();
         int movecounts = (int)(convertInchesToCounts(inches));
         if(opModeIsActive()&&runtime.seconds()<timeoutSeconds){
@@ -239,17 +244,16 @@ public class AutoBlueRedTerminal extends LinearOpMode {
 
     }
     public void clawClose(){
-        if(gamepad2.right_bumper){
+
             leftClaw.setPosition(leftClawClosePosition);
             rightClaw.setPosition(rightClawClosePosition);
-        }
 
     }
     public void clawOpen(){
-        if (gamepad2.left_bumper){
+
             leftClaw.setPosition(leftClawOpenPosition);
             rightClaw.setPosition(rightClawOpenPosition);
-        }
+
     }
 
 }
