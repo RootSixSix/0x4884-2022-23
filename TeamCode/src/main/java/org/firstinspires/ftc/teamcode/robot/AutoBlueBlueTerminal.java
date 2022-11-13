@@ -6,8 +6,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@Autonomous(name="AutoRedAllainceBlueTerminal",group="19380")
-public class AutoRedBlueTerminal extends LinearOpMode {
+@Autonomous(name="AutoBlueAllainceBlueTerminal",group="19380")
+public class AutoBlueBlueTerminal extends LinearOpMode {
     private DcMotor front_left  = null;
     private DcMotor front_right = null;
     private DcMotor back_left   = null;

@@ -37,7 +37,8 @@ public class MecanumDriveSample extends OpMode {
     double leftClawOpenPosition = 0;
     double rightClawClosePosition = 0.439215707789307;
     double rightClawOpenPosition = 0;
-    double armConstant = 0.85;
+    double rotationMultiplicative = 0.75;
+    double armConstant = 0.93;
     double clawConstant = 0.8;
 
 
@@ -98,10 +99,10 @@ public class MecanumDriveSample extends OpMode {
         // You may need to multiply some of these by -1 to invert direction of
         // the motor.  This is not an issue with the calculations themselves.
 
-        double leftFrontPower  = drive + strafe + twist;
-        double rightFrontPower = drive - strafe - twist;
-        double leftBackPower   = drive - strafe + twist;
-        double rightBackPower  = drive + strafe - twist;
+        double leftFrontPower  = drive + strafe + (rotationMultiplicative*twist);
+        double rightFrontPower = drive - strafe - (rotationMultiplicative*twist);
+        double leftBackPower   = drive - strafe + (rotationMultiplicative*twist);
+        double rightBackPower  = drive + strafe - (rotationMultiplicative*twist);
         double max;
         max = Math.max(Math.abs(leftFrontPower), Math.abs(rightFrontPower));
         max = Math.max(max, Math.abs(leftBackPower));
@@ -121,7 +122,8 @@ public class MecanumDriveSample extends OpMode {
         // *magnitude*.  Not the greatest velocity.
 
         // apply the calculated values to the motors.
-        if(gamepad1.right_bumper){
+
+ /*       if(gamepad1.right_bumper){
             if(turboMode = false){
                 turboMode = true;
                 driveMultiplicative = 1;
@@ -130,7 +132,7 @@ public class MecanumDriveSample extends OpMode {
                 turboMode = false;
                 driveMultiplicative = 0.7;
             }
-        }
+        }*/
 
         front_left.setPower(driveMultiplicative*leftFrontPower);
         front_right.setPower(driveMultiplicative*rightFrontPower);

@@ -34,7 +34,7 @@ public class AutoBlueRedTerminal extends LinearOpMode {
     static final double ARM_MIDDLE_BAR_POS = 0;
     static final double ARM_HIGH_BAR_POS = 0;
 
-    private final ElapsedTime runtime = new ElapsedTime();
+
 
 
     public void runOpMode() throws InterruptedException {
@@ -60,16 +60,20 @@ public class AutoBlueRedTerminal extends LinearOpMode {
         rightClaw.setPosition(0);
         waitForStart();
         if(opModeIsActive()){
-            clawClose();
+            ElapsedTime runtime2 = new ElapsedTime();
 
-            while(runtime.seconds()<1){
+            while(runtime2.seconds()<1.5){
 
                 front_right.setPower(-0.5);
                 front_left.setPower(0.5);
                 back_right.setPower(0.5);
                 back_left.setPower(-0.5);
-                runtime.reset();
+
             }
+            front_left.setPower(0);
+            front_right.setPower(0);
+            back_right.setPower(0);
+            back_left.setPower(0);
  /*           ElapsedTime runtime2 = new ElapsedTime();
             while(runtime2.seconds()<2){
                 front_left.setPower(0.5);
