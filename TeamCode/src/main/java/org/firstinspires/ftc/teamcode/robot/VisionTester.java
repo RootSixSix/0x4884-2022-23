@@ -1,10 +1,10 @@
-package org.firstinspires.ftc.teamcode.robot;/*
 package org.firstinspires.ftc.teamcode.robot;
+
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 public class VisionTester extends OpMode {
-    org.firstinspires.ftc.teamcode.Robot.VisionBrain visionBrain;
+    VisionBrain visionBrain;
 
 
     @Override
@@ -27,4 +27,3 @@ public class VisionTester extends OpMode {
     }
 }
 
- */

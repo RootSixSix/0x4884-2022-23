@@ -156,7 +156,7 @@ public class MecanumDriveSample extends OpMode {
 
     }
     public void clawClose(){
-        if(gamepad2.right_bumper){
+        if(gamepad2.right_bumper) {
             leftClaw.setPosition(leftClawClosePosition);
             rightClaw.setPosition(rightClawClosePosition);
         }

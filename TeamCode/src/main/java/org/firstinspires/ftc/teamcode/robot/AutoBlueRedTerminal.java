@@ -13,8 +13,7 @@ public class AutoBlueRedTerminal extends LinearOpMode {
     private DcMotor back_left   = null;
     private DcMotor back_right  = null;
     public DcMotor[] driveMotors = new DcMotor[4];
-    //   private DcMotorEx arm = null;
-    //   private Servo leftClaw = null;
+    private DcMotor arm = null;
     private Servo leftClaw = null;
     private Servo rightClaw = null;
     double driveMultiplicative = 1;
@@ -23,6 +22,7 @@ public class AutoBlueRedTerminal extends LinearOpMode {
     double leftClawOpenPosition = 0;
     double rightClawClosePosition = 0.439215707789307;
     double rightClawOpenPosition = 0;
+    double armMaintPower = 0;
     double armConstant = 0.85;
     double clawConstant = 0.8;
     static final double WHEEL_DIAMETER_INCHES = 2.25;     // For figuring circumference
@@ -43,7 +43,7 @@ public class AutoBlueRedTerminal extends LinearOpMode {
         front_right  = hardwareMap.get(DcMotor.class, "frdrive");
         back_left    = hardwareMap.get(DcMotor.class, "bldrive");
         back_right   = hardwareMap.get(DcMotor.class, "brdrive");
-        //   arm = hardwareMap.get(DcMotorEx.class, "armdrive");
+        arm = hardwareMap.get(DcMotor.class, "armdrive");
         rightClaw = hardwareMap.get(Servo.class, "rightClaw");
         leftClaw = hardwareMap.get(Servo.class, "leftClaw");
         front_left.setDirection(DcMotor.Direction.REVERSE);
@@ -259,5 +259,10 @@ public class AutoBlueRedTerminal extends LinearOpMode {
             rightClaw.setPosition(rightClawOpenPosition);
 
     }
-
+    public void armMaint(double timeout){
+        ElapsedTime armtime = new ElapsedTime();
+        while(armtime.seconds()<timeout){
+            arm.setPower(armMaintPower);
+        }
+    }
 }
