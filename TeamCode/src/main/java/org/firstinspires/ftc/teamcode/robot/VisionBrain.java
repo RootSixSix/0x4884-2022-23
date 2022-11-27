@@ -19,8 +19,8 @@ public class VisionBrain {
     OpMode opmode;
     private Telemetry telemetry = null;
     boolean useWebCam = true;
-    boolean showCamera = false;
-    boolean showCameraOD = false;
+    boolean showCamera = true;
+    boolean showCameraOD = true;
     float zoom = 0.8f;
     int returnvalue = 0;
 
@@ -28,7 +28,6 @@ public class VisionBrain {
     TFObjectDetector tfod = null;
 
     final String VUFORIA_KEY = "AY7lK0j/////AAABmffl0hEQlUFfjdc9h8Aw+t5/CrgiSiIgNkZKZcw3qdOlnNEv3HarcW4e1pfYY5Nq+4XVrrnhKKNBeR/S08U41ogd0NpmWwOPgttli7io4p8WtbgWj+c/WL9uDzZK9u03K3Kfx+XFxdk/vy0tnFKCPg5w9M5iy7QQP2SDHFDJuhcAOtsayV8n8hQvB528RDRDykBtXei/V6xhN/qLc+S1Gp7eS0ZzpDFnT+uED0CwYK+oaWKNsPPv+3u9tCwofQ5PaRHlN05kH4V97Nn0N7WquSmDpcCZpAVqI1QnMEi7Fm9rvJgET+4OIlx4ZueF3ZTuXtJJSaEJ8Y6CEy9F7FS0RnlVtt4QlqpQVSmWmJQWYBNu";
-
     private static final String[] LABELS = {
             "Panel",
             "Bulb",
@@ -70,7 +69,7 @@ public class VisionBrain {
         if (useWebCam)
             parameters.cameraName = opmode.hardwareMap.get(WebcamName.class, "Webcam 1");
         else // else assume phone back camera
-            parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
+            parameters.cameraDirection = VuforiaLocalizer.CameraDirection.FRONT;
 
         //  Instantiate the Vuforia engine
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
@@ -92,10 +91,50 @@ public class VisionBrain {
         tfodParameters.inputSize = 320;
 
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
+
         //    tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABELS);
     }
 
-    public void process(double timeout) {
+    public void process2() {
+        opmode.telemetry.addData("VisionBrain Process2", "Called!");
+        opmode.telemetry.addData("Status", "Processing!");
+
+        if (tfod != null) {
+            ElapsedTime timer = new ElapsedTime();
+
+            opmode.telemetry.addData("ElapsedTime", timer.seconds());
+
+            // getUpdatedRecognitions() will return null if no new information is available since
+            // the last time that call was made.
+            List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+            if(updatedRecognitions == null){
+                opmode.telemetry.addData("UpdatedRecognitionNull","Fail");
+            }
+            else{
+                opmode.telemetry.addData("UpdatedRecognitionNotNull","Pass");
+            }
+/*            while (updatedRecognitions == null) {
+                try {
+                    sleep(100);
+                    opmode.telemetry.addData("Let us try again", 2);
+                    updatedRecognitions = tfod.getUpdatedRecognitions();
+                } catch (InterruptedException e) {
+                }
+            }*/
+            /*
+            while (updatedRecognitions == null && timer.seconds() < 5) {
+                try {
+                    sleep(100);
+                    updatedRecognitions = tfod.getUpdatedRecognitions();
+                } catch (InterruptedException e) {
+                }
+            }*/
+            opmode.telemetry.addData("Recognition Size", 3);
+        }
+
+    }
+
+        public void process(double timeout) {
         opmode.telemetry.addData("Status", "Processing!");
 
         if (tfod != null) {
@@ -103,8 +142,8 @@ public class VisionBrain {
 
             // getUpdatedRecognitions() will return null if no new information is available since
             // the last time that call was made.
-            List<Recognition> updatedRecognitions = updatedRecognitions = tfod.getUpdatedRecognitions();
-
+            List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+            ;
             while (updatedRecognitions == null && timer.seconds() < timeout) {
                 try {
                     sleep(100);
@@ -130,5 +169,60 @@ public class VisionBrain {
         opmode.telemetry.update();
     }
 
+    public double panelDetection(double timeout){
+        opmode.telemetry.addData("Status", "Processing!");
+        Recognition winner = null;
+        if (tfod != null) {
+            ElapsedTime timer = new ElapsedTime();
+
+            // getUpdatedRecognitions() will return null if no new information is available since
+            // the last time that call was made.
+            List<Recognition> updatedRecognitions = updatedRecognitions = tfod.getUpdatedRecognitions();
+
+            while (updatedRecognitions == null && timer.seconds() < timeout) {
+                try {
+                    sleep(100);
+                } catch (InterruptedException e) {
+                }
+                updatedRecognitions = tfod.getUpdatedRecognitions();
+            }
+
+            if (updatedRecognitions != null) {
+                opmode.telemetry.addData("# Object Detected", updatedRecognitions.size());
+                // step through the list of recognitions and display boundary info.
+                int i = 0;
+                for (Recognition recognition : updatedRecognitions) {
+                    i++;
+                    opmode.telemetry.addLine()
+                            .addData(String.format("label (%d)", i), recognition.getLabel())
+                            .addData("Conf", "%.02f", recognition.getConfidence())
+                            .addData("Loc", "(%.01f,%.01f,%.01f,%.01f)", recognition.getLeft(), recognition.getTop(), recognition.getRight(), recognition.getBottom());
+
+                    if(winner == null){
+                        winner = recognition;
+                    }
+                    else if(winner.getConfidence()<recognition.getConfidence()){
+                        winner = recognition;
+                    }
+                    else if(winner.getConfidence()> recognition.getConfidence()){
+                        winner = winner;
+                    }
+                }
+            } else opmode.telemetry.addData("Status", "Recognitions is NULL");
+        } else opmode.telemetry.addData("Status", "TFOD is NULL");
+
+        opmode.telemetry.update();
+        if(winner.getLabel().equals("Bolt")){
+            returnvalue = 1;
+        }
+        if(winner.getLabel().equals("Bulb")){
+            returnvalue = 2;
+        }
+        if(winner.getLabel().equals("Panel")){
+            returnvalue = 3;
+        }
+
+        return returnvalue;
+    }
 
 }
