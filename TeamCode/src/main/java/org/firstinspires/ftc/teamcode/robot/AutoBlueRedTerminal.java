@@ -90,16 +90,58 @@ public class AutoBlueRedTerminal extends LinearOpMode {
         waitForStart();
         if(opModeIsActive()){
             process();
-            ElapsedTime runtime2 = new ElapsedTime();
 
-            while(runtime2.seconds()<1.5){
 
-                front_right.setPower(-0.5);
-                front_left.setPower(0.5);
-                back_right.setPower(0.5);
-                back_left.setPower(-0.5);
-
+            if(returnvalue == 1){
+                ElapsedTime runtime2 = new ElapsedTime();
+                while(runtime2.seconds()<0.75){
+                    front_right.setPower(0.5);
+                    front_left.setPower(-0.5);
+                    back_right.setPower(-0.5);
+                    back_left.setPower(0.5);
+                }
+                setDriveStop();
+                ElapsedTime runtime3 = new ElapsedTime();
+                while(runtime3.seconds()<1.2){
+                    front_right.setPower(0.5);
+                    front_left.setPower(0.5);
+                    back_right.setPower(0.5);
+                    back_left.setPower(0.5);
+                }
+                setDriveStop();
             }
+
+            if(returnvalue == 2){
+                ElapsedTime runtime4 = new ElapsedTime();
+                while(runtime4.seconds()<1.2){
+                    front_left.setPower(0.5);
+                    front_right.setPower(0.5);
+                    back_left.setPower(0.5);
+                    back_right.setPower(0.5);
+                }
+                setDriveStop();
+            }
+
+            if(returnvalue == 3){
+                ElapsedTime runtime5 = new ElapsedTime();
+                while(runtime5.seconds()<0.75){
+                    front_right.setPower(-0.5);
+                    front_left.setPower(0.5);
+                    back_right.setPower(0.5);
+                    back_left.setPower(-0.5);
+                }
+                setDriveStop();
+                ElapsedTime runtime3 = new ElapsedTime();
+                while(runtime3.seconds()<1.2){
+                    front_right.setPower(0.5);
+                    front_left.setPower(0.5);
+                    back_right.setPower(0.5);
+                    back_left.setPower(0.5);
+                }
+                setDriveStop();
+            }
+
+
             front_left.setPower(0);
             front_right.setPower(0);
             back_right.setPower(0);
@@ -220,7 +262,10 @@ public class AutoBlueRedTerminal extends LinearOpMode {
     }
 
     public void setDriveStop() {
-        setDrive(0, 0, 0, 0);
+        front_left.setPower(0);
+        front_right.setPower(0);
+        back_left.setPower(0);
+        back_right.setPower(0);
     }
 
     public void setDriveDeltaPos(int deltaPos, double power) {
@@ -374,4 +419,5 @@ public class AutoBlueRedTerminal extends LinearOpMode {
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABELS);
         // tfod.loadModelFromFile(TFOD_MODEL_FILE, LABELS);
     }
+
 }

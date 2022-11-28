@@ -80,20 +80,54 @@ public class AutoRedRedTerminal extends LinearOpMode {
         waitForStart();
         if(opModeIsActive()){
             process();
-            ElapsedTime runtime2 = new ElapsedTime();
-
-            while(runtime2.seconds()<1.5){
-
-                front_right.setPower(0.5);
-                front_left.setPower(-0.5);
-                back_right.setPower(-0.5);
-                back_left.setPower(0.5);
-
+            if(returnvalue == 1){
+                ElapsedTime runtime2 = new ElapsedTime();
+                while(runtime2.seconds()<0.75){
+                    front_right.setPower(0.5);
+                    front_left.setPower(-0.5);
+                    back_right.setPower(-0.5);
+                    back_left.setPower(0.5);
+                }
+                setDriveStop();
+                ElapsedTime runtime3 = new ElapsedTime();
+                while(runtime3.seconds()<1.2){
+                    front_right.setPower(0.5);
+                    front_left.setPower(0.5);
+                    back_right.setPower(0.5);
+                    back_left.setPower(0.5);
+                }
+                setDriveStop();
             }
-            front_left.setPower(0);
-            front_right.setPower(0);
-            back_right.setPower(0);
-            back_left.setPower(0);
+
+            if(returnvalue == 2){
+                ElapsedTime runtime4 = new ElapsedTime();
+                while(runtime4.seconds()<1.2){
+                    front_left.setPower(0.5);
+                    front_right.setPower(0.5);
+                    back_left.setPower(0.5);
+                    back_right.setPower(0.5);
+                }
+                setDriveStop();
+            }
+
+            if(returnvalue == 3){
+                ElapsedTime runtime5 = new ElapsedTime();
+                while(runtime5.seconds()<0.75){
+                    front_right.setPower(-0.5);
+                    front_left.setPower(0.5);
+                    back_right.setPower(0.5);
+                    back_left.setPower(-0.5);
+                }
+                setDriveStop();
+                ElapsedTime runtime3 = new ElapsedTime();
+                while(runtime3.seconds()<1.2){
+                    front_right.setPower(0.5);
+                    front_left.setPower(0.5);
+                    back_right.setPower(0.5);
+                    back_left.setPower(0.5);
+                }
+                setDriveStop();
+            }
         }
     }
     public double process() {
@@ -174,5 +208,11 @@ public class AutoRedRedTerminal extends LinearOpMode {
         // Use loadModelFromFile() if you have downloaded a custom team model to the Robot Controller's FLASH.
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABELS);
         // tfod.loadModelFromFile(TFOD_MODEL_FILE, LABELS);
+    }
+    public void setDriveStop(){
+        front_left.setPower(0);
+        front_right.setPower(0);
+        back_left.setPower(0);
+        back_right.setPower(0);
     }
 }
