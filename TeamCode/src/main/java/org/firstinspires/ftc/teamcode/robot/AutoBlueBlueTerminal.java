@@ -91,7 +91,6 @@ public class AutoBlueBlueTerminal extends LinearOpMode {
         telemetry.update();
         waitForStart();
         if (opModeIsActive()) {
-
             process();
 
            if(returnvalue == 1){
